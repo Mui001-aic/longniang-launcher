@@ -9,7 +9,7 @@ import { createOwner, checkDeepSeekKey, validateAccount } from './lib/setup.mjs'
 import { aiSummary, gamePort, readEnvValues, setEnvValue, setEnvValues } from './lib/envfile.mjs';
 import { dataDirOf } from './lib/db.mjs';
 import { findFreePort, lanAddresses, portFree } from './lib/util.mjs';
-import { checkForUpdate } from './lib/update.mjs';
+import { checkForUpdate, checkLauncherUpdate } from './lib/update.mjs';
 
 const VERSION = '0.2.0';
 /** 跑在 Electron 外壳里：窗口由外壳负责，这边不要再去开 Edge。 */
@@ -23,7 +23,8 @@ if (!config.gameDir) {
 const game = new GameServer(config.gameDir);
 const tunnel = new Tunnel();
 let busy = null; // 正在做的事情（启动、建账号……），防止连点
-let updateState = null; // 最近一次「检查更新」的结果
+let updateState = null; // 最近一次「检查更新」的结果（游戏）
+let launcherUpdateState = null; // 启动器自己的更新
 
 /** 查一次更新，结果留在 updateState 里给面板读。失败不抛错。 */
 async function refreshUpdate(force = false) {
@@ -101,6 +102,7 @@ function statePayload() {
       busy,
     },
     tunnel: tunnel.snapshot(),
+    launcherUpdate: launcherUpdateState,
     net: {
       lan: lan.map((l) => ({ ...l, url: `http://${l.address}:${port}/` })),
       localUrl: `http://127.0.0.1:${port}/`,
@@ -132,6 +134,16 @@ async function handleApi(req, res, url) {
   if (req.method === 'GET' && pathname === '/api/state') return sendJson(res, 200, statePayload());
 
   // 检查更新：第一次请求会算一次，之后走 6 小时缓存
+  if (pathname === '/api/launcher-update') {
+    const force = url.searchParams.get('force') === '1';
+    try {
+      launcherUpdateState = await checkLauncherUpdate({ force });
+    } catch (err) {
+      launcherUpdateState = { error: String(err.message ?? err), hasUpdate: false };
+    }
+    return sendJson(res, 200, launcherUpdateState);
+  }
+
   if (req.method === 'GET' && pathname === '/api/update') {
     const force = url.searchParams.get('force') === '1';
     return sendJson(res, 200, await refreshUpdate(force));

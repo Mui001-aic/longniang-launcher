@@ -86,7 +86,7 @@ electron-packager electron LongNiang --platform=win32 --arch=x64 --out=dist --ov
 #    然后压缩成 payload.zip
 
 # 2. 编译
-.\build\build-installer.ps1 -Payload payload.zip -Icon build\icon.ico -Version 1.6.3
+.\build\build-installer.ps1 -Payload payload.zip -Icon build\icon.ico -Version 1.6.4
 ```
 
 编译出来的就是发布用的 `LongNiang.exe`（免安装，双击自解压）。
@@ -96,6 +96,36 @@ electron-packager electron LongNiang --platform=win32 --arch=x64 --out=dist --ov
 ```powershell
 .\build\build-uninstaller.ps1 -Icon build\icon.ico
 ```
+
+## 发新版（自动更新怎么生效）
+
+启动器的「设置 → 启动项」里有一行**启动器更新**，它去自己的仓库查版本。
+两种发布方式，二选一：
+
+**方式 A：改 `launcher/version.json`（最省事）**
+
+```json
+{
+  "version": "1.6.4",
+  "url": "https://github.com/Mui001/longniang-launcher/releases",
+  "download": "",
+  "notes": "这次改了什么"
+}
+```
+
+把 `version` 改成新版本号，提交到 main 分支。启动器下次检查（缓存 6 小时）就会提示有新版本。
+
+**方式 B：建 GitHub Release**
+
+1. Releases → Create a new release
+2. Tag 写成版本号，比如 `v1.6.4`（前面的 v 会被自动去掉）
+3. 把新的 `LongNiang.exe` 作为附件传上去
+4. Publish
+
+启动器优先读 Release（tag 当版本号，附件当下载链接），没有 Release 才去读 `version.json`。
+
+**版本号从哪来**：`launcher/build.json` 里的 `launcherVersion`。
+改版本时**两个地方都要改**：`build.json`（启动器自报的版本）和发布源（`version.json` 或 Release tag）。
 
 ## 许可证
 
@@ -110,8 +140,8 @@ electron-packager electron LongNiang --platform=win32 --arch=x64 --out=dist --ov
 
 ## 免责
 
-个人作品，非官方。只在作者本人的 B站 账号（Mui001_aic）和GitHub（Mui001/Mui001-aic）发布。
+个人作品，非官方。只在作者本人的 B站 账号（Mui001_aic）发布。
 从其他渠道拿到的安装包无法确认真伪，不为其安全性负责。
 
-本软件按你拿到的样子提供，不做任何保证：不保证一定能用、不保证不出错、不保证不丢存档
+本软件按你拿到的样子提供，不做任何保证：不保证一定能用、不保证不出错、不保证不丢存档。
 AI 生成的内容不保证正确，费用由使用者自己承担。

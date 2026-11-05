@@ -199,3 +199,133 @@ function buildResult(local, remote, { cached, error }) {
     repoUrl: remote?.repoUrl ?? `https://github.com/${REPO}`,
   };
 }
+
+
+/* ================= 启动器自己的更新检查 ================= */
+
+/**
+ * 启动器版本的发布源：自己的 GitHub 仓库。
+ * 优先读 Releases（tag 就是版本号），没有 Releases 再读仓库里的 launcher/version.json。
+ * 两种都拿不到时，明确说「还没发布过」，不能报成「已是最新」。
+ */
+export const LAUNCHER_REPO = 'Mui001-aic/longniang-launcher';
+const LAUNCHER_CACHE = path.join(STATE_DIR, 'launcher-update.json');
+
+function localLauncherVersion() {
+  const b = readJson(path.join(LAUNCHER_DIR, 'build.json'), null);
+  return b?.launcherVersion ?? null;
+}
+
+/** 版本号比较：a 比 b 新就 true */
+function versionNewer(a, b) {
+  const x = versionParts(a);
+  const y = versionParts(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const p = x[i] ?? 0;
+    const q = y[i] ?? 0;
+    if (p > q) return true;
+    if (p < q) return false;
+  }
+  return false;
+}
+
+/** 依次试：GitHub API → 镜像；再试仓库里的 version.json */
+async function fetchLauncherRemote() {
+  const apiUrls = [
+    `https://api.github.com/repos/${LAUNCHER_REPO}/releases/latest`,
+    `https://gh-proxy.com/https://api.github.com/repos/${LAUNCHER_REPO}/releases/latest`,
+    `https://ghproxy.net/https://api.github.com/repos/${LAUNCHER_REPO}/releases/latest`,
+  ];
+  const jsonUrls = [
+    `https://raw.githubusercontent.com/${LAUNCHER_REPO}/main/launcher/version.json`,
+    `https://cdn.jsdelivr.net/gh/${LAUNCHER_REPO}@main/launcher/version.json`,
+    `https://gh-proxy.com/https://raw.githubusercontent.com/${LAUNCHER_REPO}/main/launcher/version.json`,
+  ];
+
+  for (const url of apiUrls) {
+    try {
+      const data = await fetchJson(url);
+      const tag = String(data?.tag_name ?? '').replace(/^v/i, '');
+      if (!tag) continue;
+      const asset = (data.assets ?? []).find((a) => /\.(exe|zip)$/i.test(a.name ?? ''));
+      return {
+        version: tag,
+        notes: String(data.body ?? '').slice(0, 800),
+        url: data.html_url ?? `https://github.com/${LAUNCHER_REPO}/releases`,
+        download: asset?.browser_download_url ?? null,
+        source: 'releases',
+      };
+    } catch {
+      // 换下一个
+    }
+  }
+
+  for (const url of jsonUrls) {
+    try {
+      const data = await fetchJson(url);
+      const v = String(data?.version ?? '').replace(/^v/i, '');
+      if (!v) continue;
+      return {
+        version: v,
+        notes: String(data.notes ?? '').slice(0, 800),
+        url: data.url ?? `https://github.com/${LAUNCHER_REPO}/releases`,
+        download: data.download ?? null,
+        source: 'version.json',
+      };
+    } catch {
+      // 换下一个
+    }
+  }
+
+  const err = new Error(
+    '没找到启动器的发布版本。仓库 ' + LAUNCHER_REPO + ' 里既没有 Release，也没有 launcher/version.json。',
+  );
+  err.code = 'NO_RELEASES';
+  throw err;
+}
+
+/**
+ * 返回给面板用：本地版本、远端版本、要不要更新。
+ * 和游戏那个一样缓存 6 小时，force 可以强制刷新。
+ */
+export async function checkLauncherUpdate({ force = false } = {}) {
+  const local = localLauncherVersion();
+  const cached = readJson(LAUNCHER_CACHE, null);
+  const ttl = TTL_MS;
+
+  if (!force && cached && typeof cached.checkedAt === 'number' && Date.now() - cached.checkedAt < ttl) {
+    return { ...cached, cached: true, error: cached.error ?? null };
+  }
+
+  try {
+    const remote = await fetchLauncherRemote();
+    const hasUpdate = local ? versionNewer(remote.version, local) : false;
+    const result = {
+      checkedAt: Date.now(),
+      local,
+      remote,
+      hasUpdate,
+      error: null,
+      repoUrl: `https://github.com/${LAUNCHER_REPO}`,
+    };
+    try {
+      fs.mkdirSync(STATE_DIR, { recursive: true });
+      fs.writeFileSync(LAUNCHER_CACHE, JSON.stringify(result, null, 2));
+    } catch {
+      // 写不了就算了，下次重新查
+    }
+    return { ...result, cached: false };
+  } catch (err) {
+    const message = err?.name === 'AbortError' ? '连 GitHub 超时了' : String(err?.message ?? err);
+    const result = {
+      checkedAt: cached?.checkedAt ?? null,
+      local,
+      remote: cached?.remote ?? null,
+      hasUpdate: false,
+      error: message,
+      repoUrl: `https://github.com/${LAUNCHER_REPO}`,
+    };
+    if (cached?.remote) return { ...result, cached: true };
+    return { ...result, cached: false };
+  }
+}

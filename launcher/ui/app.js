@@ -60,6 +60,7 @@ function render(state) {
     updateInfo = state.update;
     renderUpdate();
   }
+  if (state.launcherUpdate) renderLauncherUpdate(state.launcherUpdate);
   const game = state.game;
 
   $('statusPill').textContent = STATE_TEXT[game.state] ?? game.state;
@@ -822,7 +823,7 @@ $('resetLookBtn')?.addEventListener('click', () => {
 
 
 /* 启动器自己的版本（跟着安装包走，方便确认装的是哪一版） */
-const APP_VERSION = '1.5.2';
+const APP_VERSION = currentState?.launcherUpdate?.local ?? currentState?.version ?? '—';
 const versionEl = $('appVersion');
 if (versionEl) versionEl.textContent = `启动器 v${APP_VERSION}`;
 
@@ -860,3 +861,50 @@ $('manualUrlBtn')?.addEventListener('click', () =>
     await toast('tunnelNote', r.ok, r.ok ? '好了，上面那个链接发给朋友就能进' : r.message);
   }),
 );
+
+
+/* ---------------- 启动器自己的更新 ---------------- */
+
+function renderLauncherUpdate(info) {
+  const pill = $('launcherPill');
+  const note = $('launcherNote');
+  const link = $('launcherLink');
+  if (!pill || !note) return;
+
+  const local = info?.local ?? '—';
+  const remote = info?.remote;
+
+  if (info?.hasUpdate && remote) {
+    pill.textContent = `启动器 v${local} → v${remote.version}`;
+    pill.className = 'pill tiny warn';
+    note.textContent = '有新版本';
+    if (link) {
+      link.hidden = false;
+      link.href = remote.download || remote.url || info.repoUrl;
+    }
+  } else if (info?.error) {
+    pill.textContent = `启动器 v${local}`;
+    pill.className = 'pill tiny';
+    note.textContent = '检查失败：' + info.error;
+    if (link) link.hidden = true;
+  } else if (info?.remote) {
+    pill.textContent = `启动器 v${local}`;
+    pill.className = 'pill tiny ok';
+    note.textContent = '已是最新';
+    if (link) link.hidden = true;
+  } else {
+    pill.textContent = `启动器 v${local}`;
+    pill.className = 'pill tiny';
+    note.textContent = '还没查';
+    if (link) link.hidden = true;
+  }
+}
+
+$('checkLauncherBtn')?.addEventListener('click', () =>
+  withButton($('checkLauncherBtn'), '查询中…', async () => {
+    const r = await api('/api/launcher-update?force=1');
+    renderLauncherUpdate(r);
+  }),
+);
+
+renderLauncherUpdate(currentState?.launcherUpdate);

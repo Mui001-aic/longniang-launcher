@@ -1,0 +1,6 @@
+{
+  "version": "1.6.5",
+  "url": "https://github.com/Mui001-aic/longniang-launcher/releases",
+  "download": "",
+  "notes": "启动器当前版本。发新版时把 version 改成新的，启动器下次检查就会提示更新。"
+}
