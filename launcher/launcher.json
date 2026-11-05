@@ -1,0 +1,10 @@
+﻿{
+    "gameDir":  "",
+    "controlPort":  3210,
+    "autoStart":  true,
+    "tunnel":  {
+                   "kind":  "sakura",
+                   "frpExe":  "",
+                   "frpArgs":  ""
+               }
+}

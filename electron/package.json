@@ -1,0 +1,8 @@
+{
+  "name": "longniang-launcher",
+  "productName": "龙娘跑团",
+  "version": "1.0.0",
+  "description": "龙娘跑团 · 启动器（Electron 外壳）",
+  "main": "main.js",
+  "private": true
+}

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>龙娘跑团 · 启动器</title>
+    <link rel="stylesheet" href="/ui/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-text">
+            <div class="title" id="appTitle">龙娘跑团 · 启动器</div>
+          </div>
+        </div>
+
+        <nav class="tabs" id="tabs">
+          <button class="tab" data-tab="game">游戏</button>
+          <button class="tab" data-tab="net">联机</button>
+          <button class="tab" data-tab="settings">设置</button>
+        </nav>
+
+        <div class="top-right">
+          <span class="pill" id="aiPill">AI：—</span>
+          <span class="pill" id="statusPill">未启动</span>
+          <div class="win-btns">
+            <button class="win-btn" id="winMin" title="最小化">–</button>
+            <button class="win-btn close" id="winClose" title="收进托盘"></button>
+          </div>
+        </div>
+      </header>
+
+      <div class="banner" id="pathBanner" hidden></div>
+
+      <main class="panes">
+        <!-- ========== 游戏 ========== -->
+        <section class="pane" data-pane="game">
+          <div class="game-layout">
+            <aside class="side-card">
+              <div class="game-center">
+                <img class="game-logo" id="gameLogo" src="/ui/logo.png" alt="龙娘跑团" />
+                <div class="who-name" id="whoName">本机服务器</div>
+                <div class="who-sub" id="whoSub">未启动</div>
+
+                <button class="primary big" id="startBtn">启动游戏</button>
+
+                <div class="game-actions">
+                  <button class="ghost" id="openBtn">打开游戏窗口</button>
+                  <button class="ghost" id="restartBtn">重启</button>
+                  <button class="ghost danger" id="stopBtn">停止</button>
+                </div>
+
+                <div class="url-box" id="localUrlBox" hidden>
+                  <span class="url-label">本机地址</span>
+                  <code id="localUrl">—</code>
+                  <button class="mini" data-copy="localUrl">复制</button>
+                </div>
+
+                <p class="note" id="errorNote" hidden></p>
+                <p class="note small" id="uptime"></p>
+              </div>
+            </aside>
+
+            <div class="side-log">
+              <div class="card-head">
+                <h2>日志</h2>
+                <label class="auto"><input type="checkbox" id="autoScroll" checked /> 自动滚到底</label>
+              </div>
+              <pre id="logBox"></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== 联机 ========== -->
+        <section class="pane" data-pane="net">
+          <div class="card">
+            <div class="card-head">
+              <h2>局域网</h2>
+              <span class="hint">同一 WiFi 直接用这个地址</span>
+            </div>
+            <ul class="lan-list" id="lanList"><li class="empty">游戏启动后这里会列出地址</li></ul>
+
+            <div class="card-head small">
+              <h2>内网穿透</h2>
+              <span class="pill tiny" id="tunnelPill">未开启</span>
+            </div>
+            <ul class="lan-list" id="tunnelAddrList">
+              <li class="empty" id="tunnelAddrEmpty">未开启内网穿透</li>
+            </ul>
+
+            <label class="field">
+              <span
+                >手动填地址
+                <span
+                  class="q"
+                  data-tip="怎么给樱花穿透建隧道：&#10;1) 打开樱花启动器，登录 natfrp.com 账号&#10;2) 「隧道」→「新建隧道」，类型选 TCP&#10;3) 本地地址填 127.0.0.1，本地端口填游戏端口（默认 3000）&#10;4) 「自动 HTTPS」选「自动」&lt;&lt; 这一步别漏&#10;5) 保存后回到列表，点「启动」&#10;6) 启动后会显示一个远程地址，形如 frp-off.com:19191&#10;7) 把它复制进下面的框里，点「填入」&#10;&#10;不用写 http:// 或 https://，也不用写结尾的斜杠。"
+                  >?</span
+                ></span
+              >
+              <span class="field-row"
+                ><input id="manualUrl" placeholder="例如 frp-off.com:19191" /><button class="mini" id="manualUrlBtn">
+                  填入</button
+                ></span
+              >
+            </label>
+            <p class="note" id="tunnelNote">朋友不在同一个网络时用这个：填好地址以后，上面会显示一个能直接打开的链接，发给朋友就行。</p>
+          </div>
+        </section>
+
+        <!-- ========== 设置 ========== -->
+        <section class="pane" data-pane="settings">
+          <div class="settings-layout">
+            <aside class="sub-nav">
+              <button class="sub-item on" data-sub="launch">启动项</button>
+              <button class="sub-item" data-sub="personal">个性化</button>
+            </aside>
+
+            <div class="sub-body">
+              <!-- 启动项 -->
+              <div class="sub-pane on" data-sub="launch">
+                <div class="card">
+                  <div class="card-head">
+                    <h2>启动项</h2>
+                    <span class="hint" id="restartHint"></span>
+                  </div>
+                  <label class="field">
+                    <span>DeepSeek API 密钥</span>
+                    <input id="keyInput" type="password" placeholder="sk-…（留空表示不改）" autocomplete="off" />
+                  </label>
+                  <div class="row">
+                    <button class="ghost" id="saveKeyBtn">保存密钥</button>
+                    <button class="ghost" id="fakeBtn">先用假主持人</button>
+                  </div>
+
+                  <label class="field field-inline">
+                    <span>端口</span>
+                    <input id="portInput" type="number" min="1" max="65535" />
+                    <button class="ghost" id="savePortBtn">保存端口</button>
+                  </label>
+
+                  <div class="row">
+                    <button class="ghost" id="dataBtn">打开存档</button>
+                    <button class="ghost" id="dirBtn">打开游戏目录</button>
+                  </div>
+
+                  <p class="note small" id="appVersion"></p>
+                  <div class="version-line">
+                    <span class="pill tiny" id="versionPill">检查中…</span>
+                    <button class="ghost small" id="checkUpdateBtn">检查更新</button>
+                    <span class="note small" id="updateNote">正在查 GitHub…</span>
+                    <a class="update-link" id="updateLink" target="_blank" rel="noreferrer" hidden>去 GitHub 看更新 →</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 个性化 -->
+              <div class="sub-pane" data-sub="personal">
+                <div class="card">
+                  <div class="card-head"><h2>外观</h2></div>
+
+                  <div class="field">
+                    <span>主题</span>
+                    <div class="theme-row" id="themeRow">
+                      <button class="theme-dot" data-theme="blue" title="龙猫蓝"></button>
+                      <button class="theme-dot" data-theme="green" title="甜柠青"></button>
+                      <button class="theme-dot" data-theme="mint" title="小草绿"></button>
+                      <button class="theme-dot" data-theme="amber" title="菠萝黄"></button>
+                      <button class="theme-dot" data-theme="brown" title="橡木棕"></button>
+                      <button class="theme-dot" data-theme="pink" title="樱粉"></button>
+                      <button class="theme-dot" data-theme="purple" title="神秘紫"></button>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <span>标题栏文本</span>
+                    <input id="titleInput" placeholder="龙娘跑团 · 启动器" maxlength="40" />
+                  </div>
+
+                  <div class="field">
+                    <span>背景图片</span>
+                    <div class="row">
+                      <button class="ghost" id="pickBgBtn">选一张图片</button>
+                      <button class="ghost" id="clearBgBtn">去掉背景</button>
+                    </div>
+                    <p class="note small">图片只存在本机浏览器里，不会传到别处。太大（超过 4MB）的图选不上。</p>
+                  </div>
+
+                  <div class="row">
+                    <button class="ghost" id="resetLookBtn">恢复默认外观</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <div class="overlay" id="closeDialog" hidden>
+      <div class="dialog-card">
+        <div class="dialog-body">
+          <label class="dialog-option">
+            <input type="radio" name="closeAction" value="hide" checked />
+            <span>隐藏到任务栏托盘</span>
+          </label>
+          <label class="dialog-option">
+            <input type="radio" name="closeAction" value="quit" />
+            <span>退出主程序</span>
+          </label>
+        </div>
+        <button class="dialog-ok" id="closeOkBtn">确定</button>
+        <label class="dialog-forget">
+          <input type="checkbox" id="closeForget" />
+          <span>不再提醒</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="overlay" id="wizard" hidden>
+      <div class="wizard-card">
+        <h2>第一次运行</h2>
+        <p class="note">建一个站长账号（你自己，有全部权限）。朋友以后用邀请码注册。</p>
+        <label class="field"><span>用户名</span><input id="wUser" placeholder="3～20 位字母、数字或下划线" /></label>
+        <label class="field"><span>显示名</span><input id="wName" placeholder="游戏里显示的名字，留空就和用户名一样" /></label>
+        <label class="field"><span>密码</span><input id="wPass" type="password" placeholder="至少 8 位" /></label>
+        <label class="field"><span>再输一次密码</span><input id="wPass2" type="password" /></label>
+        <label class="field"><span>DeepSeek API 密钥（可留空）</span><input id="wKey" type="password" placeholder="sk-… 留空就先用假主持人试试流程" /></label>
+        <div class="wizard-actions">
+          <button class="primary" id="wGo">建好并启动</button>
+          <span class="note" id="wMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/ui/app.js"></script>
+  </body>
+</html>

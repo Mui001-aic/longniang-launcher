@@ -1,0 +1,1468 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b1020;
+  --bg2: #0f1730;
+  --card: #141d33;
+  --card2: #18223c;
+  --line: #24304f;
+  --text: #e7ecf7;
+  --muted: #8b98b3;
+  --accent: #4d8bff;
+  --accent2: #2f6be0;
+  --ok: #37c48b;
+  --warn: #f0b429;
+  --bad: #ef5b6b;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* hidden 属性要能压过 .overlay/.url-box 自己的 display */
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(1200px 600px at 15% -10%, #1a2a52 0%, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, #24124a 0%, transparent 55%), var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+}
+
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 22px 40px;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), #7d4dff);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(77, 139, 255, 0.35);
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: 0.3px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+  max-width: 620px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.top-right {
+  display: flex;
+  gap: 8px;
+}
+
+.pill {
+  border: 1px solid var(--line);
+  background: rgba(20, 29, 51, 0.75);
+  color: var(--muted);
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.pill.tiny {
+  padding: 2px 8px;
+  font-size: 11px;
+}
+
+.pill.ok {
+  color: #0b1020;
+  background: var(--ok);
+  border-color: transparent;
+  font-weight: 650;
+}
+
+.pill.warn {
+  color: #241a00;
+  background: var(--warn);
+  border-color: transparent;
+  font-weight: 650;
+}
+
+.pill.bad {
+  color: #fff;
+  background: var(--bad);
+  border-color: transparent;
+  font-weight: 650;
+}
+
+.pill.busy {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* ---------- 提示条 ---------- */
+.banner {
+  background: rgba(239, 91, 107, 0.12);
+  border: 1px solid #7a2f3c;
+  color: #ffc2c9;
+  border-radius: 12px;
+  padding: 11px 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+/* ---------- 卡片 ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card.hero {
+  background: linear-gradient(160deg, #1b2a4d, var(--card));
+  border-color: #2d4272;
+}
+
+.card.logs {
+  grid-column: 1 / -1;
+}
+
+.card.settings {
+  grid-column: 1 / -1;
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px auto 240px;
+  gap: 22px;
+  align-items: start;
+}
+
+.setting-block.narrow .field {
+  margin-top: 12px;
+}
+
+.field-label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 12px 0 0;
+}
+
+.auto {
+  white-space: nowrap;
+}
+
+/* ---------- 穿透设置 ---------- */
+.tunnel-config {
+  margin-top: 12px;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+
+.tunnel-config summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  user-select: none;
+}
+
+.tunnel-config summary:hover {
+  color: #b9c8e4;
+}
+
+.seg {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0 4px;
+}
+
+.seg-btn {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+}
+
+.seg-btn.on {
+  background: rgba(77, 139, 255, 0.18);
+  border-color: #3a61ad;
+  color: #d5e3ff;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.card-head.small {
+  margin: 14px 0 8px;
+}
+
+h2 {
+  font-size: 14px;
+  margin: 0;
+  letter-spacing: 0.4px;
+  color: #cfd9ee;
+}
+
+h3 {
+  font-size: 12px;
+  margin: 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+}
+
+.note.small {
+  font-size: 11.5px;
+  margin-top: 6px;
+}
+
+.update-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #9ec2ff;
+  text-decoration: none;
+}
+
+.update-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1180px) {
+  .settings-row {
+    grid-template-columns: minmax(0, 1fr) 190px;
+  }
+}
+
+.note.bad {
+  color: #ffb3bb;
+}
+
+/* ---------- 按钮 ---------- */
+button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  transition: transform 0.06s ease, filter 0.15s ease, background 0.15s ease;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.primary {
+  width: 100%;
+  padding: 13px 16px;
+  font-size: 15px;
+  font-weight: 650;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  box-shadow: 0 10px 26px rgba(47, 107, 224, 0.35);
+}
+
+.primary.slim {
+  width: auto;
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+/* 已经在跑：按钮变绿，别再显得像不能点 */
+.primary.done:disabled {
+  opacity: 1;
+  background: linear-gradient(135deg, #2f9e6f, #1f7a54);
+  box-shadow: 0 10px 26px rgba(31, 122, 84, 0.28);
+  cursor: default;
+}
+
+.ghost {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  padding: 9px 14px;
+  font-size: 13px;
+}
+
+.ghost:hover {
+  background: rgba(77, 139, 255, 0.12);
+  border-color: #35558f;
+}
+
+.ghost.danger:hover {
+  background: rgba(239, 91, 107, 0.14);
+  border-color: #6d2b36;
+}
+
+.mini {
+  background: rgba(77, 139, 255, 0.15);
+  border-color: #2f4d85;
+  color: #bcd2ff;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* ---------- 地址框 ---------- */
+.url-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 9px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.url-label {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+code {
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 13px;
+  color: #cfe0ff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.lan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.lan-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.lan-list li .iface {
+  color: var(--muted);
+  font-size: 11px;
+  min-width: 78px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lan-list li.empty {
+  color: var(--muted);
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* ---------- 表单 ---------- */
+.field {
+  display: block;
+  margin-top: 12px;
+}
+
+.field span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background-color: rgba(8, 12, 24, 0.75);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+  color-scheme: dark;
+}
+
+input::placeholder {
+  color: #5f6d88;
+}
+
+input:focus {
+  border-color: #3c66b8;
+  box-shadow: 0 0 0 3px rgba(77, 139, 255, 0.15);
+}
+
+.auto {
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------- 日志 ---------- */
+#logBox {
+  margin: 0;
+  height: 210px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: 'Cascadia Mono', Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #b8c6dd;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ---------- 覆盖层 ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 18, 0.78);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  padding: 20px;
+}
+
+.wizard-card {
+  width: min(460px, 100%);
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.wizard-card h2 {
+  font-size: 17px;
+  margin: 0 0 6px;
+}
+
+.wizard-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.wizard-actions .primary {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 让带圈问号排在标题后面，别掉到下一行 */
+label.field > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+/* 带圈问号：字在圈正中间，整体靠右 */
+label.field > span {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+}
+label.field > span > em {
+  font-style: normal;
+}
+.q {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #2b3450;
+  color: #9fb0d0;
+  font-size: 11px;
+  line-height: 15px;
+  text-align: center;
+  padding: 0;
+  margin: 0 0 0 4px;
+  cursor: help;
+  user-select: none;
+}
+.q:hover {
+  background: #3a4670;
+  color: #e7ecf7;
+}
+
+/* 输入框 + 按钮并排 */
+.field-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.field-row input {
+  flex: 1;
+  min-width: 0;
+}
+.mini.icon {
+  padding: 0 8px;
+  line-height: 1;
+}
+.hint.bad {
+  color: #e2747e;
+}
+
+/* 即时提示框 */
+#tip {
+  position: fixed;
+  z-index: 999;
+  max-width: 300px;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: #0e1424;
+  border: 1px solid #2a3350;
+  color: #cfd9ee;
+  font-size: 12px;
+  line-height: 1.55;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s;
+}
+#tip.show {
+  opacity: 1;
+}
+/* ---------- 一屏放下：不让整页滚动，只有日志内部滚 ---------- */
+html,
+body {
+  overflow: hidden;
+}
+
+.app {
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  padding: 12px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+.card {
+  padding: 12px 14px 12px;
+}
+
+.card-head {
+  margin-bottom: 8px;
+}
+
+.card.logs {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#logBox {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+}
+
+.lan-list {
+  margin: 6px 0 10px;
+}
+
+.lan-list li {
+  padding: 4px 0;
+}
+
+.card-head.small {
+  margin: 10px 0 6px;
+}
+
+.note {
+  margin: 8px 0;
+}
+
+.tunnel-config summary {
+  margin-top: 2px;
+}
+
+/* 设置那一块压扁一点 */
+.settings-row {
+  gap: 16px;
+}
+
+.field {
+  margin-bottom: 6px;
+}
+
+.btn,
+button {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+/* 再压一压，保证日志也能露出来 */
+.card {
+  padding: 10px 12px;
+}
+.card-head {
+  margin-bottom: 6px;
+}
+h2 {
+  font-size: 13px;
+}
+.settings-row {
+  gap: 12px;
+}
+.field input,
+.field select,
+.field textarea {
+  padding: 5px 8px;
+}
+.field > span {
+  margin-bottom: 3px;
+}
+.note {
+  margin: 6px 0;
+  font-size: 12px;
+}
+.lan-list {
+  margin: 4px 0 8px;
+}
+.lan-list li {
+  padding: 3px 0;
+}
+.card-head.small {
+  margin: 8px 0 4px;
+}
+.card.logs {
+  min-height: 0;
+}
+#logBox {
+  min-height: 0;
+}
+.field {
+  margin-bottom: 4px;
+}
+/* 窗口一般有 1100 左右，设置那一排放四个块不用换行 */
+@media (max-width: 1180px) {
+  .settings-row {
+    grid-template-columns: minmax(0, 1fr) 150px auto 220px;
+  }
+}
+@media (max-width: 980px) {
+  .settings-row {
+    grid-template-columns: minmax(0, 1fr) 150px;
+  }
+}
+/* ================= 标签页 + 自绘标题栏 ================= */
+
+.topbar {
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+.topbar button,
+.topbar .pill,
+.win-btns {
+  -webkit-app-region: no-drag;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 20px;
+  flex: 1;
+}
+
+.tab {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #93a1bd;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #dfe7f6;
+}
+
+.tab.on {
+  background: rgba(90, 130, 220, 0.22);
+  border-color: rgba(120, 160, 255, 0.45);
+  color: #eaf1ff;
+}
+
+.win-btns {
+  display: flex;
+  gap: 2px;
+  margin-left: 10px;
+}
+
+.win-btn {
+  width: 30px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #9fb0d0;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e7ecf7;
+}
+
+.win-btn.close:hover {
+  background: #d1404a;
+  color: #fff;
+}
+
+/* 关闭按钮画一个 ×，免得字体里字形不居中 */
+.win-btn.close::before {
+  content: '';
+  width: 11px;
+  height: 11px;
+  background:
+    linear-gradient(45deg, transparent 45%, currentColor 45%, currentColor 55%, transparent 55%),
+    linear-gradient(-45deg, transparent 45%, currentColor 45%, currentColor 55%, transparent 55%);
+}
+
+/* 分页 */
+.panes {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.pane {
+  display: none;
+  height: 100%;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.pane.on {
+  display: block;
+}
+
+/* 日志页整块撑满 */
+.pane[data-pane='logs'] {
+  overflow: hidden;
+}
+
+.pane[data-pane='logs'] .card.logs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pane[data-pane='logs'] #logBox {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* 无边框窗口的圆角和边 */
+body {
+  border-radius: 10px;
+  overflow: hidden;
+}
+/* ---------- 顶栏：铺满整条，颜色和内容分开（参考 PCL2 的做法） ---------- */
+.topbar {
+  /* 吃掉 .app 的 padding，让拖动区域一直延伸到窗口最上边、最左右 */
+  margin: -12px -16px 0;
+  padding: 10px 16px 10px;
+  background: linear-gradient(180deg, rgba(14, 20, 36, 0.96), rgba(10, 15, 28, 0.9));
+  border-bottom: 1px solid rgba(120, 150, 220, 0.14);
+  border-radius: 10px 10px 0 0;
+  backdrop-filter: blur(6px);
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 5;
+}
+
+/* 窗口最上面那一条也要能拖（只盖 10px，别盖到标签和按钮） */
+.topbar::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  -webkit-app-region: drag;
+  pointer-events: auto;
+}
+
+/* 标签和右侧状态区盖在拖动层上面，保证点得到 */
+.tabs,
+.top-right {
+  position: relative;
+  z-index: 2;
+}
+
+/* 顶栏整体可拖；只有标签本体、状态胶囊、窗口按钮不可拖（空位照样能拖） */
+.brand,
+.brand *,
+.tabs,
+.top-right {
+  -webkit-app-region: drag;
+}
+
+.tab,
+.top-right .pill,
+.win-btns,
+.win-btn,
+.topbar button {
+  -webkit-app-region: no-drag;
+}
+
+/* 按钮悬停用一点点色差，鼠标看得出来哪些能点 */
+.tab {
+  -webkit-app-region: no-drag;
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.win-btn.close:hover {
+  background: #d1404a;
+}
+
+/* ---------- 游戏页：左边操作、右边日志（照 PCL2 的排法） ---------- */
+.game-layout {
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.side-card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(24, 34, 60, 0.9), rgba(14, 20, 36, 0.9));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  gap: 12px;
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #4f7bff, #2b4fbf);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.who-name {
+  font-size: 15px;
+  color: #eaf1ff;
+}
+
+.who-sub {
+  font-size: 12px;
+  color: #8b98b3;
+  margin-top: 2px;
+}
+
+.primary.big {
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.side-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row.tight {
+  display: flex;
+  gap: 8px;
+}
+
+.row.tight > button {
+  flex: 1;
+}
+
+.side-card .url-box {
+  margin-top: auto;
+}
+
+/* 右边：日志占满 */
+.side-log {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: linear-gradient(180deg, var(--card2), var(--card));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}
+
+.side-log #logBox {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+}
+
+
+/* ================= PCL 风格：居中启动页 / 设置子导航 / 个性化 ================= */
+
+/* 顶栏去掉 logo 之后收紧一点 */
+.brand .brand-text {
+  min-width: 180px;
+}
+
+/* 游戏页：中间一列 */
+.pane[data-pane='game'] {
+  display: none;
+}
+.pane[data-pane='game'].on {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 320px;
+  padding-bottom: 20px;
+}
+
+.game-logo {
+  width: 132px;
+  height: 132px;
+  border-radius: 28px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  margin-bottom: 4px;
+}
+
+.game-center .who-name {
+  font-size: 17px;
+}
+
+.game-center .primary.big {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.game-actions {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.game-actions > button {
+  flex: 1;
+  font-size: 12px;
+  padding: 7px 4px;
+}
+
+.game-center .url-box,
+.game-center .note {
+  width: 100%;
+}
+
+/* 设置页：左边子导航 */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.sub-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+}
+
+.sub-item {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #93a1bd;
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.sub-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #dfe7f6;
+}
+
+.sub-item.on {
+  background: rgba(90, 130, 220, 0.22);
+  color: #eaf1ff;
+}
+
+.sub-body {
+  min-height: 0;
+  overflow: auto;
+}
+
+.sub-pane {
+  display: none;
+}
+
+.sub-pane.on {
+  display: block;
+}
+
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-inline > span {
+  min-width: 60px;
+}
+
+.field-inline > input {
+  max-width: 120px;
+}
+
+.version-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* 主题色块 */
+.theme-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.theme-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.theme-dot.on {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.theme-dot[data-theme='blue'] { background: #4f7bff; }
+.theme-dot[data-theme='green'] { background: #46c2a4; }
+.theme-dot[data-theme='mint'] { background: #7bc862; }
+.theme-dot[data-theme='amber'] { background: #e8b93c; }
+.theme-dot[data-theme='brown'] { background: #a8794f; }
+.theme-dot[data-theme='pink'] { background: #e87ba8; }
+.theme-dot[data-theme='purple'] { background: #9b7bff; }
+
+/* 不透明度滑块 */
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent, #4f7bff);
+}
+
+/* 背景图片 */
+body.has-bg {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+body.has-bg .app {
+  background: rgba(8, 12, 24, 0.72);
+  backdrop-filter: blur(2px);
+  height: 100%;
+}
+
+
+/* 标签在顶栏正中，左右各占一头 */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tabs {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-left: 0;
+  flex: 0 0 auto;
+}
+.top-right {
+  margin-left: auto;
+}
+
+
+/* 主题色影响整窗背景（盖掉原来写死的深蓝渐变） */
+body {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, var(--bg2) 0%, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, var(--bg2) 0%, transparent 55%),
+    var(--bg);
+}
+
+/* 卡片、边框跟着主题走 */
+.card,
+.side-card,
+.side-log {
+  border-color: var(--line);
+}
+
+
+/* ================= 纯色：不用渐变 ================= */
+
+/* 整窗底色 */
+body {
+  background: var(--bg) !important;
+}
+
+/* 卡片统一用 --card */
+.card,
+.side-card,
+.side-log,
+.pane[data-pane='logs'] .card.logs {
+  background: var(--card) !important;
+  border-color: var(--line) !important;
+}
+
+/* 主按钮用强调色纯色 */
+.primary,
+.primary.big {
+  background: var(--accent) !important;
+  background-image: none !important;
+}
+
+.primary:hover {
+  background: var(--accent2) !important;
+}
+
+/* 顶栏：比内容再深一档，跟着主题走，始终看得出来是标题栏 */
+.topbar {
+  background: var(--bar) !important;
+  background-image: none !important;
+  border-bottom: 1px solid var(--line) !important;
+  backdrop-filter: none !important;
+}
+
+/* 头像方块也用纯色 */
+.avatar {
+  background: var(--accent) !important;
+}
+
+/* 背景图模式：底下一层半透明纯色，图片不刺眼 */
+body.has-bg .app {
+  background: var(--bar-alt) !important;
+}
+/* 游戏页左右两栏：左操作、右日志 */
+.pane[data-pane='game'].on {
+  display: block;
+}
+.game-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+.game-layout .side-card {
+  min-height: 0;
+  overflow: auto;
+}
+.game-layout .game-center {
+  width: 100%;
+  padding-bottom: 0;
+}
+.game-layout .game-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+}
+.game-layout .side-log {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.game-layout .side-log #logBox {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+/* ---------- 圆角窗口：透明底 + 自己画圆角 ---------- */
+html {
+  background: transparent !important;
+}
+body {
+  background: transparent !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.app {
+  background: var(--bg) !important;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100vh;
+}
+/* 有一点描边，免得和桌面糊在一起 */
+.app::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ---------- 关闭确认框 ---------- */
+#closeDialog .dialog-card {
+  width: 360px;
+  padding: 22px 24px 16px;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dialog-body {
+  display: flex;
+  gap: 30px;
+  padding: 10px 0 4px;
+}
+
+.dialog-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dialog-option input[type='radio'] {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}
+
+.dialog-ok {
+  appearance: none;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  padding: 9px 46px;
+  cursor: pointer;
+}
+
+.dialog-ok:hover {
+  background: var(--accent2);
+}
+
+.dialog-forget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dialog-forget input {
+  accent-color: var(--accent);
+}
+.dialog-forget span {
+  white-space: nowrap;
+}
+#closeDialog .dialog-card {
+  width: 400px;
+}
+/* ---------- 窗口按钮：减号和叉号画成同一个粗细、同一个尺寸 ---------- */
+.win-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 26px;
+}
+
+/* 最小化：一根 11px 的横线 */
+#winMin {
+  font-size: 0; /* 把原来的字符藏掉，只用下面的线 */
+}
+
+#winMin::before {
+  content: '';
+  width: 11px;
+  height: 1.6px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+/* 关闭：两根等长的线转 45 度，和减号一样粗 */
+.win-btn.close::before,
+.win-btn.close::after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 1.6px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.win-btn.close::before {
+  transform: rotate(45deg);
+  background: currentColor;
+}
+
+.win-btn.close::after {
+  transform: rotate(-45deg);
+}
+/* 内网穿透那栏的公网地址：当链接显示，能直接点开 */
+.tunnel-link {
+  color: var(--accent);
+  text-decoration: none;
+  word-break: break-all;
+  flex: 1;
+  min-width: 0;
+}
+.tunnel-link:hover {
+  text-decoration: underline;
+}
