@@ -140,6 +140,8 @@ electron-packager electron LongNiang --platform=win32 --arch=x64 --out=dist --ov
 
 ## 免责
 
+本项目由deepseek flash v4.1创作
+
 个人作品，非官方。只在作者本人的 B站 账号（Mui001_aic）及 GitHub 账号（Mui001/Mui001-aic）发布。
 从其他渠道拿到的安装包无法确认真伪，不为其安全性负责。
 
