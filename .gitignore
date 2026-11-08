@@ -1,0 +1,34 @@
+# 依赖
+node_modules/
+dist/
+
+# 构建产物
+payload.zip
+payload/
+*.exe
+*.msi
+!launcher/bin/.gitkeep
+
+# 运行时状态（不进仓库）
+launcher/state/
+launcher/bin/
+launcher/launcher.json
+*.log
+*.db
+*.db-journal
+*.db-wal
+
+# 密钥和本机配置
+.env
+.env.*
+!.env.example
+
+# 编辑器
+.vscode/
+.idea/
+*.user
+*.suo
+
+# 系统
+Thumbs.db
+desktop.ini
